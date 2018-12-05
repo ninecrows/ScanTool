@@ -23,6 +23,16 @@ namespace ScanTool
         public MainWindow()
         {
             InitializeComponent();
+
+            VolumeInformation v = new VolumeInformation("c:\\");
+            String vsn = v.SerialNumber();
+            String vv = v.VolumeName();
+            String fstype = v.FileSystemName();
+            
+
+            String fid = Helpers.GetFileId("c:\\windows-version.txt");
+
+            //String fsv = NativeHelpers.GetFileId("c:\\windows-version.txt");
         }
     }
 }

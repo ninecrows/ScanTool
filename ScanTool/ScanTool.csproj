@@ -94,5 +94,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NativeHelpers\NativeHelpers.vcxproj">
+      <Project>{9bf0fc06-6460-42c2-a5bf-040baf95d2e6}</Project>
+      <Name>NativeHelpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UsefulTools\UsefulTools.csproj">
+      <Project>{c197d775-9974-498e-8396-516d110739d9}</Project>
+      <Name>UsefulTools</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
