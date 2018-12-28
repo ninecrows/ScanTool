@@ -31,8 +31,6 @@ namespace ScanTool
             
 
             String fid = Helpers.GetFileId("c:\\windows-version.txt");
-
-            //String fsv = NativeHelpers.GetFileId("c:\\windows-version.txt");
         }
     }
 }
