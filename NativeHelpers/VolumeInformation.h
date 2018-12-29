@@ -1,4 +1,7 @@
 #pragma once
+
+using namespace System;
+
 public ref class VolumeInformation
 {
 public:
@@ -33,6 +36,9 @@ public:
 	{
 		return myFlags;
 	}
+
+public:
+		static array<String^>^ GetVolumeGuids();
 
 private:
 	System::String ^myVolumeName;

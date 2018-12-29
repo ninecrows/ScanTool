@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Helpers.h"
+#include "VolumeInformation.h"
 
 System::String ^ Helpers::GetFileId(System::String ^ myPath)
 {
@@ -56,3 +57,7 @@ System::String ^ Helpers::GetFileId(System::String ^ myPath)
 	return (myout);
 }
 
+array<System::String^>^ Helpers::GetVolumeGuids()
+{
+	return (VolumeInformation::GetVolumeGuids());
+}
