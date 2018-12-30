@@ -1,6 +1,15 @@
 #pragma once
+#include <string>
 
 using namespace System;
+
+inline void MarshalString(String ^ s, std::wstring& os) {
+	using namespace Runtime::InteropServices;
+	const wchar_t* chars =
+		(const wchar_t*)(Marshal::StringToHGlobalUni(s)).ToPointer();
+	os = chars;
+	Marshal::FreeHGlobal(IntPtr((void*)chars));
+}
 
 public ref class VolumeInformation
 {
@@ -39,6 +48,8 @@ public:
 
 public:
 		static array<String^>^ GetVolumeGuids();
+
+		static array<String^>^ GetMountPoints(String^ volumeGuid);
 
 private:
 	System::String ^myVolumeName;

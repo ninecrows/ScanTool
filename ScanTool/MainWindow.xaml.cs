@@ -32,6 +32,10 @@ namespace ScanTool
 
             String fid = Helpers.GetFileId("c:\\windows-version.txt");
             String[] guids = VolumeInformation.GetVolumeGuids();
+            foreach (String item in guids)
+            {
+                String[] options = VolumeInformation.GetMountPoints(item);
+            }
         }
     }
 }
