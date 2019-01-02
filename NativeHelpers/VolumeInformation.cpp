@@ -36,6 +36,94 @@ VolumeInformation::VolumeInformation(System::String ^myRootPath)
 		myFileSystemName = nullptr;
 		mySerialNumber = nullptr;
 	}
+
+	{
+		WIN32_FILE_ATTRIBUTE_DATA info;
+		BOOL ok(GetFileAttributesExW(path.c_str(),
+			GetFileExInfoStandard,
+			static_cast<void *>(&info)));
+
+		System::DateTime^ creationDate;
+		SYSTEMTIME systemtime;
+		if (ok)
+		{
+			FileTimeToSystemTime(&(info.ftCreationTime), &systemtime);
+			creationDate = gcnew System::DateTime((long long)(info.ftCreationTime.dwLowDateTime) | ((long long)(info.ftCreationTime.dwHighDateTime) << 32));
+		}
+		else
+		{
+			DWORD status = ::GetLastError();
+			_CrtDbgReport(_CRT_WARN, __FILE__, __LINE__, "VolumeInformation", "%lu", status);
+		}
+	}
+
+	{
+		wchar_t volumeName[1024];
+		wchar_t fsName[1024];
+		DWORD vsn;
+		DWORD fsflags;
+		BOOL ok(GetVolumeInformationW(path.c_str(),
+			volumeName, 1024,
+			&vsn,
+			nullptr,
+			&fsflags,
+			fsName, 1024));
+
+		if (ok)
+		{
+
+		}
+		else
+		{
+			DWORD status = ::GetLastError();
+			_CrtDbgReport(_CRT_WARN, __FILE__, __LINE__, "VolumeInformation", "%lu", status);
+		}
+	}
+
+	{
+		ULARGE_INTEGER free;
+		ULARGE_INTEGER total;
+		ULARGE_INTEGER totalfree;
+		BOOL ok(GetDiskFreeSpaceExW(path.c_str(), &free, &total, &totalfree));
+		if (ok)
+		{
+
+		}
+		else
+		{
+			DWORD status = ::GetLastError();
+			_CrtDbgReport(_CRT_WARN, __FILE__, __LINE__, "VolumeInformation", "%lu", status);
+		}
+
+		UINT type(GetDriveTypeW(path.c_str()));
+
+		unsigned long long freeValue = free.QuadPart;
+
+		_CrtDbgReport(_CRT_WARN, __FILE__, __LINE__, "VolumeInformation", "Type %lu", type);
+	}
+
+	{
+		HANDLE handle = CreateFileW(path.c_str(),
+			GENERIC_READ, // GENERIC_READ, GENERIC_WRITE
+			FILE_SHARE_READ || FILE_SHARE_WRITE || FILE_SHARE_DELETE,
+			nullptr,
+			OPEN_EXISTING,
+			FILE_ATTRIBUTE_NORMAL,
+			nullptr);
+
+		if (handle != INVALID_HANDLE_VALUE)
+		{
+			FILE_BASIC_INFO info;
+			BOOL ok(GetFileInformationByHandleEx(handle, FileBasicInfo, static_cast<void *>(&info), sizeof(info)));
+
+			CloseHandle(handle);
+		}
+		else
+		{
+			DWORD status = ::GetLastError();
+			_CrtDbgReport(_CRT_WARN, __FILE__, __LINE__, "VolumeInformation", "%lu", status);
+		}
+	}
 }
 
 array<String^>^ VolumeInformation::GetVolumeGuids()
